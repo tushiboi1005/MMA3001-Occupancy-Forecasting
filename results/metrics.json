@@ -1,0 +1,128 @@
+{
+  "source": "/content/project/MMA3001-Occupancy-Forecasting-main/5occupancySensor_MayToDec2024_9MRows (1).zip",
+  "events_clean": 9091732,
+  "hourly_states": 67397,
+  "feature_rows": 50398,
+  "spaces_modelled": 4,
+  "date_min": "2023-11-23 13:36:52+00:00",
+  "date_max": "2026-04-22 13:02:38+00:00",
+  "test_overall": {
+    "persistence": {
+      "MAE": 0.7464608957994895,
+      "RMSE": 1.7241610981070112
+    },
+    "previous_day": {
+      "MAE": 0.8714318867486656,
+      "RMSE": 1.92231343181756
+    },
+    "ML": {
+      "MAE": 0.7280210044044101,
+      "RMSE": 1.378466308064114
+    }
+  },
+  "per_space": {
+    "0f3f37f8-0335-41e0-ae87-a1d677dfc7d7": {
+      "train": 8409,
+      "validation": 2254,
+      "test": {
+        "persistence": {
+          "MAE": 0.6006042296072508,
+          "RMSE": 1.1178313056067815
+        },
+        "previous_day": {
+          "MAE": 0.6803625377643504,
+          "RMSE": 1.2057265175176821
+        },
+        "ML": {
+          "MAE": 0.5861094531913078,
+          "RMSE": 0.8679138594778498
+        }
+      },
+      "selected_min_leaf": 20,
+      "validation_MAE_by_leaf": {
+        "20": 0.5601761473732944,
+        "50": 0.5631891241931551,
+        "100": 0.5644361815558865
+      }
+    },
+    "227f1068-9e41-469f-bef0-275f27a0bdba": {
+      "train": 7976,
+      "validation": 2995,
+      "test": {
+        "persistence": {
+          "MAE": 0.46833930704898447,
+          "RMSE": 0.9329364235414814
+        },
+        "previous_day": {
+          "MAE": 0.5821385902031063,
+          "RMSE": 1.039397169280235
+        },
+        "ML": {
+          "MAE": 0.5555362049130607,
+          "RMSE": 0.7755008102677021
+        }
+      },
+      "selected_min_leaf": 50,
+      "validation_MAE_by_leaf": {
+        "20": 0.7059331428365009,
+        "50": 0.7018912544524655,
+        "100": 0.7024317566016465
+      }
+    },
+    "941f0352-bb69-47d0-a9c5-ac29eb4f7319": {
+      "train": 7877,
+      "validation": 2671,
+      "test": {
+        "persistence": {
+          "MAE": 0.6434253626579317,
+          "RMSE": 1.1137881751951277
+        },
+        "previous_day": {
+          "MAE": 0.7229761347683669,
+          "RMSE": 1.2488647160853037
+        },
+        "ML": {
+          "MAE": 0.578820760498064,
+          "RMSE": 0.8694238994872139
+        }
+      },
+      "selected_min_leaf": 100,
+      "validation_MAE_by_leaf": {
+        "20": 0.5666916964284228,
+        "50": 0.5667471847937843,
+        "100": 0.5643209011008437
+      }
+    },
+    "cca1ac3e-f81f-4ebb-aa2b-8b0bf3e9e53b": {
+      "train": 4133,
+      "validation": 1567,
+      "test": {
+        "persistence": {
+          "MAE": 1.6887686062246279,
+          "RMSE": 3.4884305205374306
+        },
+        "previous_day": {
+          "MAE": 1.9553450608930987,
+          "RMSE": 3.900834371729954
+        },
+        "ML": {
+          "MAE": 1.4933685329447242,
+          "RMSE": 2.789423314636243
+        }
+      },
+      "selected_min_leaf": 100,
+      "validation_MAE_by_leaf": {
+        "20": 1.226513720524827,
+        "50": 1.2219984347744135,
+        "100": 1.2158078503130612
+      }
+    }
+  },
+  "limitations": [
+    "Event-driven records; hourly snapshots use most recent state up to 2h old",
+    "Missing hours excluded, not assumed vacant",
+    "Predictions evaluated on observed hours only",
+    "Space identifiers not mapped to rooms due to unverified location mapping"
+  ],
+  "author": "NS"
+}
