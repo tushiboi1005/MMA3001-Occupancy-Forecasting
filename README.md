@@ -1,150 +1,122 @@
-# MMA3001 — Building Occupancy Forecasting
+# MMA3001 - Building Occupancy Forecasting
 
-**Author:** NS  
-**Course:** MMA3001 — Numerical Methods and Machine Learning
+Author: NS
 
-## Project Overview
+Unit: MMA3001 - Numerical Methods and Machine Learning
 
-This project investigates the use of numerical methods and machine learning to forecast building occupancy from historical sensor measurements.
+## About the Project
 
-The objective is to predict the number of occupants in a space one hour ahead using previous occupancy measurements and calendar-based features.
+For this project, I used building occupancy sensor data to predict how many people would be in a space one hour later.
 
-The project includes data preprocessing, feature engineering, baseline forecasting methods, machine learning, model evaluation, automated tests, and generated Python documentation.
+I used Python to process the data, prepare the information needed for predictions, and compare three different forecasting methods. The main goal was to see whether machine learning could predict occupancy more accurately than simpler methods.
 
 ## Dataset
 
-The project uses building occupancy sensor data supplied for the assignment.
+The dataset provided for the assignment contains approximately 9.09 million sensor records from November 2023 to April 2026.
 
-The original compressed dataset contains approximately **9.09 million event records**, with measurements spanning November 2023 to April 2026.
+The sensor readings were not recorded at regular hourly intervals, so I converted them into hourly occupancy values.
 
-Because the dataset records sensor events rather than regularly spaced observations, the preprocessing pipeline reconstructs hourly occupancy snapshots.
-
-A maximum sensor-reading age of two hours is used. Longer gaps are left missing rather than being treated as zero occupancy.
+For each hour, the program uses the most recent sensor reading if it is no more than two hours old. If there is no recent reading, that hour is treated as missing instead of assuming the space is empty.
 
 The original dataset is not included in this repository.
 
-## Methodology
+## Method
 
-### 1. Data Preprocessing
+The program first reads the dataset from a ZIP file and removes invalid records.
 
-The pipeline reads the compressed CSV dataset, extracts the required fields, processes timestamps, and reconstructs hourly occupancy states.
+It then creates hourly occupancy values and uses previous measurements to prepare the data for forecasting.
 
-### 2. Feature Engineering
+The information used for prediction includes:
 
-Historical occupancy features are joined using exact timestamps to prevent irregular observations from being mistaken for consecutive hours.
+- Current occupancy
+- Occupancy one and two hours earlier
+- Occupancy 24 hours earlier
+- Hour of the day
+- Day of the week
+- Whether it is a weekend
 
-Features include:
+The aim is to predict occupancy one hour ahead.
 
-- Current and historical occupancy measurements
-- Occupancy from the previous day
-- Hour of day
-- Day of week
-- Weekend indicator
+I compared three forecasting methods.
 
-The prediction target is occupancy one hour after the current observation.
+1. Persistence method - assumes the occupancy will remain the same as the current hour.
 
-### 3. Forecasting Models
+2. Previous-day method - uses the occupancy from the same hour on the previous day.
 
-Three forecasting approaches are compared:
+3. Machine learning method - uses a histogram-based gradient boosting model from scikit-learn to learn patterns from the data.
 
-- **Persistence baseline:** Assumes occupancy will remain unchanged.
-- **Previous-day baseline:** Uses occupancy at the corresponding hour on the previous day.
-- **Machine learning:** Uses a histogram-based gradient boosting regressor trained on historical and calendar features.
-
-### 4. Model Evaluation
-
-Data is divided chronologically into training, validation, and testing partitions using a 60/20/20 split.
-
-Performance is evaluated using:
-
-- Mean Absolute Error (MAE)
-- Root Mean Squared Error (RMSE)
-
-Both metrics are expressed in numbers of occupants. Lower values indicate better predictions.
+The data was divided in time order, with 60% for training, 20% for validation and 20% for testing.
 
 ## Results
 
-The corrected experiment generated **50,398 eligible feature rows** across **four modelled spaces**.
+After processing the dataset, 50,398 usable prediction examples were obtained across four building spaces.
 
-| Forecasting Method | MAE | RMSE |
-|---|---:|---:|
-| Persistence baseline | 0.7465 | 1.7242 |
-| Previous-day baseline | 0.8714 | 1.9223 |
-| Machine learning | **0.7280** | **1.3785** |
+The test results were:
 
-The machine learning model achieved the lowest overall MAE and RMSE among the three approaches.
+Persistence method:
+MAE = 0.7465
+RMSE = 1.7242
 
-Compared with the persistence baseline, the machine learning model reduced MAE by approximately 2.5% and RMSE by approximately 20.0%.
+Previous-day method:
+MAE = 0.8714
+RMSE = 1.9223
 
-### Model Comparison
+Machine learning method:
+MAE = 0.7280
+RMSE = 1.3785
 
-![Model comparison](results/model_comparison.png)
+MAE and RMSE measure how far the predictions are from the actual occupancy values. Lower values indicate better predictions.
 
-### Example Forecasts
+The machine learning method performed best overall. Compared with the persistence method, it reduced MAE by approximately 2.5% and RMSE by approximately 20%.
 
-![Actual and predicted occupancy](results/test_predictions.png)
+The comparison graphs are saved in the results folder.
 
-## Repository Structure
+## Project Files
 
-```text
-MMA3001-Occupancy-Forecasting/
-├── data/
-├── docs/
-├── results/
-│   ├── metrics.json
-│   ├── model_comparison.png
-│   ├── test_predictions.csv
-│   └── test_predictions.png
-├── src/
-│   ├── __init__.py
-│   └── pipeline.py
-├── tests/
-│   └── test_pipeline.py
-├── requirements.txt
-├── README.md
-└── LICENSE
-```
+src/pipeline.py - Main Python program that processes the data, trains the models and generates the results.
 
-## Running the Project
+tests/test_pipeline.py - Contains the automated tests.
 
-Install the required Python packages:
+results/ - Contains the prediction results, evaluation metrics and graphs.
 
-```bash
+docs/ - Contains the generated documentation for the Python functions.
+
+requirements.txt - Lists the Python packages needed to run the program.
+
+LICENSE - Project licence.
+
+## Running the Program
+
+First, install the required Python packages by entering the following command in the terminal:
+
 pip install -r requirements.txt
-```
 
-Place the original occupancy dataset ZIP file on your computer, then run:
+Then run the program using the original occupancy dataset ZIP file:
 
-```bash
 python -m src.pipeline --zip "path/to/occupancy.zip"
-```
 
-The pipeline generates evaluation metrics, prediction data, and plots in the `results` directory.
+Replace the example path with the actual location of the dataset.
 
-## Testing
+The program will save the results and graphs in the results folder.
 
-Run the automated tests using:
+To run the automated tests, enter:
 
-```bash
 python -m pytest tests/
-```
-
-## Documentation
-
-Generated API documentation is available in [`docs/index.html`](docs/index.html).
-
-It describes the functions used for loading data, reconstructing hourly observations, generating features, splitting data, evaluating forecasts, and running the experiment.
 
 ## Limitations
 
-- Sensor observations are irregular and some time periods contain missing data.
-- Results are based on four spaces with sufficient usable observations.
-- Historical data coverage differs between spaces.
-- Calendar features are calculated using UTC timestamps rather than local building time.
-- Model performance may differ when evaluated on new buildings or future data.
+There are some limitations to the project.
+
+The sensor data contains missing readings, and the amount of available data differs between building spaces.
+
+Only four spaces had enough usable data for the forecasting experiment.
+
+The timestamps were processed in UTC rather than local building time, which may affect the daily occupancy patterns.
+
+The results may also differ when using data from other buildings or future time periods.
 
 ## AI Assistance
 
-AI assistance was used during development for guidance with Python implementation, debugging, testing, documentation, and interpretation of results. Generated code and outputs were checked through execution and testing.
+I used ChatGPT during this project for assistance with Python implementation, debugging, testing, documentation and understanding the results.
 
-Any additional AI-use declaration required by the university should be included in the assignment submission.
+The code was executed and checked using automated tests.
