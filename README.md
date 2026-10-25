@@ -117,6 +117,6 @@ The results may also differ when using data from other buildings or future time 
 
 ## AI Assistance
 
-I used ChatGPT during this project for assistance with Python implementation, debugging, testing, documentation and understanding the results.
+I used ChatGPT during this project for assistance with writing python code and debugging, developing the forecasting methods, creating tests, and preparing documentation. I also used it to increase my understanding of the errors, results and overall implementation of the project.
 
 The code was executed and checked using automated tests.
